@@ -1,0 +1,18 @@
+# locally
+git clone https://github.com/TeamWin/android_device_samsung_gt510wifi.git
+mv android_device_samsung_gt510wifi android_device_samsung_gta9wifi
+git init
+git remote add origin git@github.com:youruser/android_device_samsung_gta9wifi.git
+git add .
+git commit -m "Initial gta9wifi device tree (from gt510wifi template)"
+git push -u origin main
+git clone https://github.com/TeamWin/android_bootable_recovery.git twrp_src
+# kernel: download matching SM-X110 source from Samsung Open Source and push to your kernel repo or reference directly
+# example placeholder:
+git clone https://github.com/youruser/kernel_samsung_sm_x110.git kernel_src
+gh workflow run build-twrp-gta9wifi.yml \
+  -f device_tree_repo='https://github.com/youruser/android_device_samsung_gta9wifi' \
+  -f kernel_repo='https://github.com/youruser/kernel_samsung_sm_x110' \
+  -f kernel_defconfig='gta9_defconfig' \
+  -f recovery_partition_size='0x02000000' \
+  -f fstab_contents="$(cat fstab_lines.txt)"
